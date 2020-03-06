@@ -19,9 +19,6 @@ stopBtn.disabled = true;
 pauseBtn.disabled = true;
 hindBtn.disabled = true;
 const currentNum = document.getElementById('current-number');
-
-const visibleDiv = document.createElement('div');
-
 let seconds;
 const usual = document.getElementById('usual');
 const reverse = document.getElementById('reverse');
@@ -44,106 +41,6 @@ function checkName() {
     }
 }
 namePlayer.addEventListener('keyup', checkName);
-
-/*function fullDisplay() {
-    const table = document.querySelector('table');
-    const orderDiv = document.getElementById('order');
-    const typeDiv = document.getElementById('type');
-    const btns = document.getElementById('btns');
-    orderDiv.style.top = '50px';
-    typeDiv.style.top = '140px';
-    btns.style.top = '50px';
-    records.style.top = '280px';
-    visibleDiv.style.left = `${window.innerWidth / 2 - table.offsetWidth / 1.8}px`;
-    visibleDiv.style.height = `${table.offsetHeight}px`;
-    visibleDiv.style.width = `${table.offsetWidth}px`;
-}
-
-function adaptDisplay() {
-    const table = document.querySelector('table');
-    const orderDiv = document.getElementById('order');
-    const typeDiv = document.getElementById('type');
-    const btns = document.getElementById('btns');
-    orderDiv.style.top = `${table.offsetHeight + 100}px`;
-    typeDiv.style.top = `${table.offsetHeight + 185}px`;
-    btns.style.top = `${table.offsetHeight + 100}px`;
-    records.style.top = `${table.offsetHeight + 360}px`;
-    visibleDiv.style.left = `${window.innerWidth / 2 - table.offsetWidth / 1.8}px`;
-    visibleDiv.style.height = `${table.offsetHeight}px`;
-    visibleDiv.style.width = `${table.offsetWidth}px`;
-}
-
-function adaptDisplayOpera() {
-    const table = document.querySelector('table');
-    const orderDiv = document.getElementById('order');
-    const typeDiv = document.getElementById('type');
-    const btns = document.getElementById('btns');
-    orderDiv.style.top = `${table.offsetHeight + 460}px`;
-    typeDiv.style.top = `${table.offsetHeight + 560}px`;
-    btns.style.top = `${table.offsetHeight + 140}px`;
-    records.style.top = `${table.offsetHeight + 690}px`;
-    visibleDiv.style.left = `${window.innerWidth / 2 - table.offsetWidth / 1.8}px`;
-    visibleDiv.style.height = `${table.offsetHeight}px`;
-    visibleDiv.style.width = `${table.offsetWidth}px`;
-}
-
-function adapt() {
-    const table = document.querySelector('table');
-    if (rows === 2) {
-        if (table.offsetWidth > window.innerWidth / 5) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    } else if (rows === 3) {
-        if (table.offsetWidth > window.innerWidth / 4) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    } else if (rows >= 4 && rows < 6) {
-        if (table.offsetWidth > window.innerWidth / 3) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    } else if (rows === 6) {
-        if (table.offsetWidth > window.innerWidth / 2.8) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    } else if (rows === 7) {
-        if (table.offsetWidth > window.innerWidth / 2.5) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    } else if (rows === 8) {
-        if (table.offsetWidth > window.innerWidth / 2.3) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    } else if (rows === 9) {
-        if (table.offsetWidth > window.innerWidth / 2.2) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    } else if (rows >= 10) {
-        if (table.offsetWidth > window.innerWidth / 2) {
-            adaptDisplay();
-        } else {
-            fullDisplay();
-        }
-    }
-    if (window.innerWidth < 450 && table.offsetHeight !== 0) {
-        adaptDisplayOpera();
-    }
-}
-
-window.addEventListener('resize', adapt);*/
 
 // -------------------ЗАПИС РЕКОРДІВ В ТАБЛИЦЮ------------------
 
@@ -350,18 +247,9 @@ function pause() {
         hindBtn.disabled = true;
         helpBtn.disabled = false;
         helpBtn.style.backgroundColor = '#bf55ec';
-        visibleDiv.style.position = 'absolute';
-        visibleDiv.style.opacity = '0';
-        visibleDiv.style.zIndex = '5';
-        visibleDiv.style.left = `${window.innerWidth / 2 - table.offsetWidth / 2}px`;
-        visibleDiv.style.top = '0px';
-        visibleDiv.style.height = `${table.offsetHeight}px`;
-        visibleDiv.style.width = `${table.offsetWidth}px`;
-        for (let i = 0; i < td.length; i += 1) {
-            const computedStyle = getComputedStyle(td[i]);
-            td[i].style.color = computedStyle.backgroundColor;
-        }
-        divTable.appendChild(visibleDiv);
+        td.forEach((item)=>{
+           item.innerHTML = '';
+        });
     } else if (this.innerHTML === 'Продовжити') {
         stopBtn.disabled = false;
         hindBtn.disabled = false;
@@ -371,12 +259,9 @@ function pause() {
         window.timerId = window.setInterval(go, 1000);
         this.innerHTML = 'Пауза';
         this.style.backgroundColor = '#d64541';
-        for (let i = 0; i < td.length; i += 1) {
-            td[i].style.color = '#fff';
-        }
-        if (divTable.contains(visibleDiv) === true) {
-            visibleDiv.parentNode.removeChild(visibleDiv);
-        }
+        td.forEach((item, index)=>{
+            item.innerHTML = arr[index];
+        });
     }
 }
 
