@@ -1,0 +1,44 @@
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+  list-style-type: none
+
+body
+  background-color: #00b16a
+  height: 100%
+
+.wrapper
+  padding-top: 30px
+  height: 600px
+  width: 100%
+
+.container
+  margin: 0 auto
+  width: 100%
+  display: flex
+  justify-content: space-around
+  @include breakpoint(max-width 920px)
+    flex-direction: column
+
+.container__block
+  @include breakpoint(max-width 920px)
+    margin: 0 auto 30px auto
+
+::-webkit-scrollbar
+  width: 20px
+
+::-webkit-scrollbar-track
+  box-shadow: inset 0 0 5px grey
+  border-radius: 10px
+
+::-webkit-scrollbar-thumb
+  background: #fff
+  border-radius: 10px
+
+::-webkit-scrollbar-thumb:hover
+  background: green
+
+.hind
+  background-color: green
+

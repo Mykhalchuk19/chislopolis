@@ -1,0 +1,48 @@
+.help-div
+  position: absolute
+  width: 600px
+  top: 100px
+  border: 1px solid #fff
+  background-color: #d35400
+  border-radius: 5px
+  z-index: 1000
+  padding: 15px
+  left: 50%
+  transform: translate(-50%, 0)
+  @include breakpoint(max-width 720px)
+    width: 90%
+    min-width: 320px
+
+.help-p
+  color: #fff
+  font-size: 18px
+  text-align: justify
+  margin-bottom: 20px
+  @include breakpoint(max-width 720px)
+    font-size: 16px
+
+
+h3,
+h4
+  font-size: 25px
+  text-align: center
+  color: #fff
+  margin-bottom: 20px
+  @include breakpoint(max-width 720px)
+    font-size: 18px
+
+
+.close-help
+  display: block
+  margin: 0 auto 20px auto
+  background-color: #e87e04
+  border: 1px solid #f4b350
+  width: 150px
+  height: 40px
+  border-radius: 3px
+  font-family: 'Josefin Sans', sans-serif
+  font-size: 20px
+  color: white
+  @include breakpoint(max-width 720px)
+    font-size: 14px
+    height: 30px
