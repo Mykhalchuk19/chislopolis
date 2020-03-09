@@ -1,5 +1,7 @@
 import '../styles/basic.sass';
 import './checkName.js';
+import './instruction.js';
+
 let arr = [];
 let a;
 let q;
@@ -7,7 +9,6 @@ let d;
 let n = 1;
 let elements;
 let rows;
-const wrapper = document.getElementById('wrapper');
 const time = document.getElementById('time');
 const restart = document.getElementById('restart');
 const stopBtn = document.getElementById('stop');
@@ -15,9 +16,6 @@ const pauseBtn = document.getElementById('pause');
 const hindBtn = document.getElementById('hind');
 const clearBtn = document.getElementById('clear');
 const helpBtn = document.getElementById('help');
-stopBtn.disabled = true;
-pauseBtn.disabled = true;
-hindBtn.disabled = true;
 const currentNum = document.getElementById('current-number');
 let seconds;
 const usual = document.getElementById('usual');
@@ -25,51 +23,45 @@ const reverse = document.getElementById('reverse');
 const ordinary = document.getElementById('ordinary');
 const even = document.getElementById('even');
 const odd = document.getElementById('odd');
-const records = document.getElementById('records');
+const records = document.getElementById('records-inner');
 const divTable = document.getElementById('div-table');
 let amountlvl = 0;
-let playerName;
 const namePlayer = document.getElementById('name-player');
 
+
 // -------------------ЗАПИС РЕКОРДІВ В ТАБЛИЦЮ------------------
+function clearListOfRecords(list) {
+  while (list.firstChild) {
+    list.removeChild(list.firstChild);
+  }
+}
+
+function clearTableOfRecords(div) {
+  div.children.forEach((list) => {
+    clearListOfRecords(list);
+  });
+}
+
+function addRecordsToTable(div, array) {
+  array.sort((c, b) => (c.levels < b.levels ? 1 : -1));
+  const infoPlayerList = div.children[0];
+  const infoLvlList = div.children[1];
+  array.forEach((item) => {
+    const infoPlayerItem = document.createElement('li');
+    const infoLvlItem = document.createElement('li');
+    infoPlayerItem.innerHTML = item.name;
+    infoLvlItem.innerHTML = item.levels;
+    infoPlayerList.appendChild(infoPlayerItem);
+    infoLvlList.appendChild(infoLvlItem);
+  });
+}
 
 function writeRecords(div, array) {
   const json = localStorage.getItem('records');
   array = JSON.parse(json);
   if (array != null) {
-    array.sort((c, b) => (c.levels < b.levels ? 1 : -1));
-    const spans = div.querySelectorAll('span');
-    const brs = div.querySelectorAll('br');
-    if (spans.length !== 0) {
-      for (let j = 0; j < spans.length; j += 1) {
-        div.removeChild(spans[j]);
-      }
-    }
-    if (brs.length !== 0) {
-      for (let j = 0; j < brs.length; j += 1) {
-        div.removeChild(brs[j]);
-      }
-    }
-    const headSpanName = document.createElement('span');
-    const headSpanLevels = document.createElement('span');
-    headSpanName.innerHTML = "Ім'я";
-    headSpanLevels.innerHTML = 'Пройдено рівнів';
-    headSpanName.classList.add('span-record-left');
-    headSpanLevels.classList.add('span-record-right');
-    div.appendChild(headSpanName);
-    div.appendChild(headSpanLevels);
-    for (let i = 0; i < array.length; i += 1) {
-      const spanInfName = document.createElement('span');
-      const spanInfLevels = document.createElement('span');
-      spanInfName.innerHTML = array[i].name;
-      spanInfLevels.innerHTML = array[i].levels;
-      spanInfName.classList.add('span-record-left');
-      spanInfLevels.classList.add('span-record-right');
-      const br = document.createElement('br');
-      div.appendChild(br);
-      div.appendChild(spanInfName);
-      div.appendChild(spanInfLevels);
-    }
+    clearTableOfRecords(document.getElementById('records-inner'));
+    addRecordsToTable(div, array);
   }
 }
 
@@ -86,6 +78,7 @@ writeRecords(records, playersRecords);
 // -----------------Додавання об'єкту в localSorage--------------
 
 function writeObj(objArr) {
+  const playerName = namePlayer.value;
   const obj = {
     name: '',
     levels: 0
@@ -103,19 +96,9 @@ function clearRecords() {
   playersArr = [];
   playersInf = [];
   playersRecords = [];
-  const spans = records.querySelectorAll('span');
-  const brs = records.querySelectorAll('br');
-  if (spans.length !== 0) {
-    for (let j = 0; j < spans.length; j += 1) {
-      records.removeChild(spans[j]);
-    }
-  }
-  if (brs.length !== 0) {
-    for (let j = 0; j < brs.length; j += 1) {
-      records.removeChild(brs[j]);
-    }
-  }
+  clearTableOfRecords(records);
 }
+
 clearBtn.addEventListener('click', clearRecords);
 
 // --------------------СТВОРЕННЯ ТАБЛИЦІ---------------
@@ -129,6 +112,7 @@ function getSqrt(num) {
   }
   return f;
 }
+
 function createTable(array) {
   let currentColumn = 0;
   const table = document.createElement('table');
@@ -179,7 +163,6 @@ function start() {
   if (divTable.contains(table) === true) {
     divTable.removeChild(table);
   }
-  playerName = namePlayer.value;
   rows = 2;
   q = 1;
   if (ordinary.checked) {
@@ -233,7 +216,7 @@ function pause() {
     hindBtn.disabled = true;
     helpBtn.disabled = false;
     helpBtn.style.backgroundColor = '#bf55ec';
-    td.forEach((item)=>{
+    td.forEach((item) => {
       item.innerHTML = '';
     });
   } else if (this.innerHTML === 'Продовжити') {
@@ -245,7 +228,7 @@ function pause() {
     window.timerId = window.setInterval(go, 1000);
     this.innerHTML = 'Пауза';
     this.style.backgroundColor = '#d64541';
-    td.forEach((item, index)=>{
+    td.forEach((item, index) => {
       item.innerHTML = arr[index];
     });
   }
@@ -253,7 +236,6 @@ function pause() {
 
 restart.addEventListener('click', start);
 pauseBtn.addEventListener('click', pause);
-// restart.addEventListener('click', adapt);
 
 // --------------------ПЕРЕВІРКА НА ПЕРЕМОГУ---------------------
 
@@ -503,53 +485,5 @@ function hindNumber() {
     }
   }
 }
+
 hindBtn.addEventListener('click', hindNumber);
-
-// -----------------ЗАКРИТИ ІНСТРУКЦІЮ-----------------
-
-function close() {
-  const div = document.querySelector('.help-div');
-  wrapper.removeChild(div);
-  if (pauseBtn.innerHTML === 'Продовжити') {
-    pauseBtn.disabled = false;
-    pauseBtn.style.backgroundColor = '#019875';
-    namePlayer.disabled = true;
-  } else {
-    namePlayer.disabled = false;
-  }
-  helpBtn.disabled = false;
-  helpBtn.style.backgroundColor = '#bf55ec';
-}
-// -----------------------ІНСТРУКЦІЯ-----------------
-function help() {
-  const helpDiv = document.createElement('div');
-  const purposeGame = document.createElement('p');
-  const headerHelp = document.createElement('h3');
-  const parameters = document.createElement('h4');
-  const textParameters = document.createElement('p');
-  const closeHelp = document.createElement('button');
-  helpDiv.classList.add('help-div');
-  headerHelp.innerHTML = 'Гра "Числополіс"';
-  purposeGame.innerHTML = 'Ціль гри - знайти всі числа таблиці в певному порядку за відведений час. Пройти всі рівні гри. Кількість часу різна на кожен рівень.';
-  parameters.innerHTML = 'Пояснення';
-  textParameters.innerHTML = 'Оберіть порядок чисел: "Звичайний" або "Зворотній" та тип чисел: "Звичайні", "Парні" або "Непарні". Після цього введіть своє ім&#39;я в поле вводу та натисніть на кнопку "Старт".<br>Натисніть на кнопку "Зупинити гру", якщо потрібно повністю зупинити гру.<br>Натисніть на кнопку "Пауза", щоб призупинити гру, "Продовжити", щоб продовжити.<br>Натисніть на кнопку "Підказка", якщо не можете знайти потрібне число. <br>Для того, щоб очистити Таблицю рекордів, натисніть на "Скинути рекорди".<br>Цікавої гри!!!';
-  purposeGame.classList.add('help-p');
-  textParameters.classList.add('help-p');
-  closeHelp.classList.add('close-help');
-  closeHelp.innerHTML = 'Зрозумiло';
-  closeHelp.addEventListener('click', close);
-
-  helpDiv.appendChild(headerHelp);
-  helpDiv.appendChild(purposeGame);
-  helpDiv.appendChild(parameters);
-  helpDiv.appendChild(textParameters);
-  helpDiv.appendChild(closeHelp);
-  wrapper.appendChild(helpDiv);
-  pauseBtn.disabled = true;
-  helpBtn.disabled = true;
-  namePlayer.disabled = true;
-  pauseBtn.style.backgroundColor = '#95a6a6';
-  helpBtn.style.backgroundColor = '#95a6a6';
-}
-
-helpBtn.addEventListener('click', help);

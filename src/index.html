@@ -1,65 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8"/>
     <title>Числополіс</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-  <div id="wrapper" class="wrapper">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<div id="wrapper" class="wrapper">
     <div class="container">
-       <div class="radio-numbers container__block">
-          <div id="order" class="radio-numbers__order">
-      <span>Порядок чисел:</span>
-      <input type="radio" id="usual" name="game" class="radio" checked />
-      <label for="usual"><span>Звичайний</span></label>
-      <input type="radio" name="game" id="reverse" class="radio" />
-      <label for="reverse"><span>Зворотнiй</span></label>
-          </div>
+        <div class="radio-numbers container__block">
+            <div id="order" class="radio-numbers__order">
+                <span>Порядок чисел:</span>
+                <input type="radio" id="usual" name="game" class="radio" checked/>
+                <label for="usual"><span>Звичайний</span></label>
+                <input type="radio" name="game" id="reverse" class="radio"/>
+                <label for="reverse"><span>Зворотнiй</span></label>
+            </div>
 
-          <div id="type" class="radio-numbers__type">
-      <span>Тип чисел:</span>
-      <input type="radio" id="ordinary" name="regime" class="radio" checked />
-      <label for="ordinary"><span>Звичайнi</span></label>
-      <input type="radio" id="even" name="regime" class="radio" />
-      <label for="even"><span>Парнi</span></label>
-      <input type="radio" id="odd" name="regime" class="radio" />
-      <label for="odd"><span>Непарнi</span></label>
+            <div id="type" class="radio-numbers__type">
+                <span>Тип чисел:</span>
+                <input type="radio" id="ordinary" name="regime" class="radio" checked/>
+                <label for="ordinary"><span>Звичайнi</span></label>
+                <input type="radio" id="even" name="regime" class="radio"/>
+                <label for="even"><span>Парнi</span></label>
+                <input type="radio" id="odd" name="regime" class="radio"/>
+                <label for="odd"><span>Непарнi</span></label>
+            </div>
         </div>
-       </div>
 
-    <div id="div-table" class="container-table container__block">
-      <p id="time" class="time-lvl"></p>
-      <p id="current-number" class="current-number"></p>
-    </div>
+        <div id="div-table" class="container-table container__block">
+            <p id="time" class="time-lvl"></p>
+            <p id="current-number" class="current-number"></p>
+        </div>
 
-    <ul id="btns" class="control-panel__list container__block">
-        <li class="control-panel__item">
-      <input id="name-player" class="control-panel__player" type="text" placeholder="Введіть ім'я" />
-        </li>
-      <li class="control-panel__item">
-      <button id="restart" class="control-panel__button" disabled>Старт</button>
-      </li>
-      <li class="control-panel__item">
-      <button id="stop" class="control-panel__button">Зупинити гру</button>
-      </li>
-      <li class="control-panel__item">
-      <button id="pause" class="control-panel__button">Пауза</button>
-      </li>
-      <li class="control-panel__item">
-      <button id="hind" class="control-panel__button">Пiдказка</button>
-      </li>
-      <li class="control-panel__item">
-      <button id="clear" class="control-panel__button">Скинути рекорди</button>
-      </li>
-      <li class="control-panel__item">
-      <button id="help" class="control-panel__button">Iнструкцiя</button>
-      </li>
-    </ul>
-    <div id="records" class="records container__block">
-      <p id="table-records" class="records__title">Таблиця рекордів</p>
+        <ul id="btns" class="control-panel__list container__block">
+            <li class="control-panel__item">
+                <input id="name-player" class="control-panel__player" type="text" placeholder="Введіть ім'я"/>
+            </li>
+            <li class="control-panel__item">
+                <button id="restart" class="control-panel__button" disabled>Старт</button>
+            </li>
+            <li class="control-panel__item">
+                <button id="stop" class="control-panel__button" disabled>Зупинити гру</button>
+            </li>
+            <li class="control-panel__item">
+                <button id="pause" class="control-panel__button" disabled>Пауза</button>
+            </li>
+            <li class="control-panel__item">
+                <button id="hind" class="control-panel__button" disabled>Пiдказка</button>
+            </li>
+            <li class="control-panel__item">
+                <button id="clear" class="control-panel__button">Скинути рекорди</button>
+            </li>
+            <li class="control-panel__item">
+                <button id="help" class="control-panel__button">Iнструкцiя</button>
+            </li>
+        </ul>
+        <div id="records" class="records container__block">
+            <p id="table-records" class="records__title">Таблиця рекордів</p>
+            <div class="records__head">
+                <span>Ім'я</span> <span>Пройдено рівнів</span>
+            </div>
+            <div id="records-inner" class="records__inner">
+                <ul id="list-player" class="records__list-name"></ul>
+                <ul class="records__list-progress"></ul>
+            </div>
+        </div>
     </div>
-    </div>
+  <div id="help-div" class="help">
+  <h3 class="help__header">Гра "Числополіс"</h3>
+  <p class="help__text">Ціль гри - знайти всі числа таблиці в певному порядку за відведений час. Пройти всі рівні гри. Кількість часу різна на кожен рівень.</p>
+  <p class="help__explanation">Пояснення</p>
+  <p class="help__text">Оберіть порядок чисел: "Звичайний" або "Зворотній" та тип чисел: "Звичайні", "Парні" або "Непарні". Після цього введіть своє ім&#39;я в поле вводу та натисніть на кнопку "Старт".</p>
+    <p class="help__text">Натисніть на кнопку "Зупинити гру", якщо потрібно повністю зупинити гру.</p>
+    <p class="help__text">Натисніть на кнопку "Пауза", щоб призупинити гру, "Продовжити", щоб продовжити.</p>
+    <p class="help__text">Натисніть на кнопку "Підказка", якщо не можете знайти потрібне число.</p>
+    <p class="help__text">Для того, щоб очистити Таблицю рекордів, натисніть на "Скинути рекорди".</p>
+    <p class="help__text">Цікавої гри!!!</p>
+    <button id="help-close" class="help__button-close">Зрозуміло</button>
   </div>
-  </body>
+</div>
+</body>
 </html>
