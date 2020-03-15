@@ -1,8 +1,14 @@
 import '../styles/basic.sass';
 import './checkName.js';
 import './instruction.js';
+import {
+  playersRecords, writeRecords, playersArr, writeObj
+} from './records';
+import {
+  arr, createTable, shuffle, range, amountRows
+} from './playingfield';
+export let amountlvl = 0;
 
-let arr = [];
 let a;
 let q;
 let d;
@@ -14,7 +20,6 @@ const restart = document.getElementById('restart');
 const stopBtn = document.getElementById('stop');
 const pauseBtn = document.getElementById('pause');
 const hindBtn = document.getElementById('hind');
-const clearBtn = document.getElementById('clear');
 const helpBtn = document.getElementById('help');
 const currentNum = document.getElementById('current-number');
 let seconds;
@@ -24,147 +29,10 @@ const ordinary = document.getElementById('ordinary');
 const even = document.getElementById('even');
 const odd = document.getElementById('odd');
 const records = document.getElementById('records-inner');
-const divTable = document.getElementById('div-table');
-let amountlvl = 0;
 const namePlayer = document.getElementById('name-player');
 
-
-// -------------------ЗАПИС РЕКОРДІВ В ТАБЛИЦЮ------------------
-function clearListOfRecords(list) {
-  while (list.firstChild) {
-    list.removeChild(list.firstChild);
-  }
-}
-
-function clearTableOfRecords(div) {
-  div.children.forEach((list) => {
-    clearListOfRecords(list);
-  });
-}
-
-function addRecordsToTable(div, array) {
-  array.sort((c, b) => (c.levels < b.levels ? 1 : -1));
-  const infoPlayerList = div.children[0];
-  const infoLvlList = div.children[1];
-  array.forEach((item) => {
-    const infoPlayerItem = document.createElement('li');
-    const infoLvlItem = document.createElement('li');
-    infoPlayerItem.innerHTML = item.name;
-    infoLvlItem.innerHTML = item.levels;
-    infoPlayerList.appendChild(infoPlayerItem);
-    infoLvlList.appendChild(infoLvlItem);
-  });
-}
-
-function writeRecords(div, array) {
-  const json = localStorage.getItem('records');
-  array = JSON.parse(json);
-  if (array != null) {
-    clearTableOfRecords(document.getElementById('records-inner'));
-    addRecordsToTable(div, array);
-  }
-}
-
-// ------------Перевірка localStorage-------------
-
-let playersArr = [];
-let playersInf = JSON.parse(localStorage.getItem('records'));
-if (playersInf != null) {
-  playersArr = JSON.parse(JSON.stringify(playersInf));
-}
-let playersRecords = JSON.parse(JSON.stringify(playersInf));
-writeRecords(records, playersRecords);
-
-// -----------------Додавання об'єкту в localSorage--------------
-
-function writeObj(objArr) {
-  const playerName = namePlayer.value;
-  const obj = {
-    name: '',
-    levels: 0
-  };
-  obj.name = playerName;
-  obj.levels = amountlvl;
-  objArr.push(obj);
-  localStorage.setItem('records', JSON.stringify(objArr));
-}
-
-// -----------------------ОЧИСТИТИ РЕКОРДИ----------------------
-
-function clearRecords() {
-  localStorage.clear();
-  playersArr = [];
-  playersInf = [];
-  playersRecords = [];
-  clearTableOfRecords(records);
-}
-
-clearBtn.addEventListener('click', clearRecords);
-
-// --------------------СТВОРЕННЯ ТАБЛИЦІ---------------
-
-function getSqrt(num) {
-  let f = 0;
-  for (let i = 1; i <= num; i += 1) {
-    if (num / i === i) {
-      f = i;
-    }
-  }
-  return f;
-}
-
-function createTable(array) {
-  let currentColumn = 0;
-  const table = document.createElement('table');
-  for (let i = 0; i < array.length; i += 1) {
-    if ((i + 1) % getSqrt(array.length) === 0) {
-      const tr = document.createElement('tr');
-      table.appendChild(tr);
-      for (let j = currentColumn; j < array.length; j += 1) {
-        const td = document.createElement('td');
-        td.innerHTML = array[j];
-        tr.appendChild(td);
-        currentColumn += 1;
-        if ((j + 1) % getSqrt(array.length) === 0) break;
-      }
-    }
-  }
-  divTable.appendChild(table);
-}
-
-// --------------ФУНКЦІЇ НА ГЕНЕРУВАННЯ МАСИВУ--------------------
-
-function compareRandom() {
-  return Math.random() - 0.5;
-}
-
-function shuffle(array) {
-  array.sort(compareRandom);
-}
-
-function range(from, to, l) {
-  arr = [];
-  for (let i = from; i <= to; i += l) {
-    arr.push(i);
-  }
-}
-
-function amountRows(row) {
-  return row * row;
-}
-
 // ------------СТАРТ-----------------
-
-function start() {
-  if (window.timerId != null) {
-    window.clearInterval(window.timerId);
-  }
-  const table = document.querySelector('table');
-  if (divTable.contains(table) === true) {
-    divTable.removeChild(table);
-  }
-  rows = 2;
-  q = 1;
+function startFirstLvl() {
   if (ordinary.checked) {
     q = 1;
     const amount = amountRows(rows);
@@ -190,16 +58,27 @@ function start() {
   shuffle(arr);
   createTable(arr);
   clickCell();
+}
+
+function start() {
+  if (window.timerId != null) {
+    window.clearInterval(window.timerId);
+  }
+  const table = document.querySelector('table');
+  if (document.getElementById('div-table').contains(table) === true) {
+    document.getElementById('div-table').removeChild(table);
+  }
+  rows = 2;
+  q = 1;
+  startFirstLvl();
   seconds = rows * rows * 3;
   time.innerHTML = seconds;
   stopBtn.disabled = false;
   pauseBtn.disabled = false;
-  pauseBtn.style.backgroundColor = '#d64541';
   this.disabled = true;
   namePlayer.disabled = true;
   hindBtn.disabled = false;
   helpBtn.disabled = true;
-  helpBtn.style.backgroundColor = '#95a6a6';
   window.timerId = window.setInterval(go, 1000);
 }
 
@@ -211,7 +90,7 @@ function pause() {
   if (this.innerHTML === 'Пауза') {
     window.clearInterval(timerId);
     this.innerHTML = 'Продовжити';
-    this.style.backgroundColor = '#019875';
+    //this.style.backgroundColor = '#019875';
     stopBtn.disabled = true;
     hindBtn.disabled = true;
     helpBtn.disabled = false;
@@ -227,7 +106,7 @@ function pause() {
     time.innerHTML = String(secondsPause);
     window.timerId = window.setInterval(go, 1000);
     this.innerHTML = 'Пауза';
-    this.style.backgroundColor = '#d64541';
+    //this.style.backgroundColor = '#d64541';
     td.forEach((item, index) => {
       item.innerHTML = arr[index];
     });
@@ -258,39 +137,14 @@ function checkWin() {
     odd.disabled = false;
     helpBtn.disabled = false;
     pauseBtn.style.backgroundColor = '#95a6a6';
-    helpBtn.style.backgroundColor = '#bf55ec';
     namePlayer.value = '';
     namePlayer.disabled = false;
     writeRecords(records, playersRecords);
     amountlvl = 0;
   } else {
     rows += 1;
-    divTable.removeChild(table);
-    if (ordinary.checked) {
-      q = 1;
-      const amount = amountRows(rows);
-      range(1, amount, q);
-      even.disabled = true;
-      odd.disabled = true;
-      a = amount;
-    } else if (even.checked) {
-      q = 2;
-      const amount = amountRows(rows) * 2;
-      range(2, amount, q);
-      ordinary.disabled = true;
-      odd.disabled = true;
-      a = amount;
-    } else if (odd.checked) {
-      q = 2;
-      const amount = amountRows(rows) * 2;
-      range(1, amount, q);
-      ordinary.disabled = true;
-      even.disabled = true;
-      a = amount;
-    }
-    shuffle(arr);
-    createTable(arr);
-    clickCell();
+    document.getElementById('div-table').removeChild(table);
+    startFirstLvl();
     let p = Number(seconds);
     p += rows * rows * 3;
     seconds = p;
@@ -419,11 +273,9 @@ function stop() {
   odd.disabled = false;
   stopBtn.disabled = true;
   pauseBtn.disabled = true;
-  pauseBtn.style.backgroundColor = '#95a6a6';
   namePlayer.disabled = false;
   hindBtn.disabled = true;
   helpBtn.disabled = false;
-  helpBtn.style.backgroundColor = '#bf55ec';
   time.innerHTML = 'Гру завершено';
   writeObj(playersArr);
   writeRecords(records, playersRecords);
@@ -486,4 +338,4 @@ function hindNumber() {
   }
 }
 
-hindBtn.addEventListener('click', hindNumber);
+document.getElementById('hind').addEventListener('click', hindNumber);

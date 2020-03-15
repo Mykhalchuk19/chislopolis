@@ -3,13 +3,11 @@ function close() {
   helpBlock.style.display = 'none';
   if (document.getElementById('pause').innerHTML === 'Продовжити') {
     document.getElementById('pause').disabled = false;
-    document.getElementById('pause').style.backgroundColor = '#019875';
     document.getElementById('name-player').disabled = true;
   } else {
     document.getElementById('name-player').disabled = false;
   }
   document.getElementById('help').disabled = false;
-  document.getElementById('help').style.backgroundColor = '#bf55ec';
 }
 document.getElementById('help-close').addEventListener('click', close);
 
